@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const app = express()
 
-const port = 3000
+port = process.env.PORT || 3000;
 
 const { db } = require('./firebase.js')
 
@@ -162,5 +162,5 @@ app.delete('/reservations/:reservationId', async (req, res) => {
 
 
 app.listen(port, ()=>{
-    console.log("Server has started on port: " + port)
+    console.log(`Server started on port ${port}`)
 })
