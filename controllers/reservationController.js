@@ -22,14 +22,14 @@ const getAllReservations = async (req, res) => {
 };
 
 const addReservation = async (req, res) => {
-    const { productId, clientName, quantity } = req.body;
+    const { barcode, clientName, quantity } = req.body;
 
     try {
-        if (!productId || !clientName || !quantity) {
+        if (!barcode || !clientName || !quantity) {
             return res.status(400).json({ message: "All fields are required!" });
         }
 
-        const productRef = db.collection('Products').doc(productId);
+        const productRef = db.collection('Products').doc(barcode);
         const productDoc = await productRef.get();
 
         if (!productDoc.exists) {
@@ -45,7 +45,7 @@ const addReservation = async (req, res) => {
         }
 
         await db.collection('Reservations').add({
-            productId,
+            barcode,
             clientName,
             quantity,
             dateReservation: new Date(),
@@ -71,9 +71,9 @@ const deleteReservation = async (req, res) => {
             return res.status(404).json({ message: "Reservation doesn't exist" });
         }
 
-        const { productId, quantity } = reservationDoc.data();
+        const { barcode, quantity } = reservationDoc.data();
 
-        const productRef = db.collection("Products").doc(productId);
+        const productRef = db.collection("Products").doc(barcode);
         const productDoc = await productRef.get();
 
         if (!productDoc.exists) {
